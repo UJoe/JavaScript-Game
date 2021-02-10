@@ -1,0 +1,4 @@
+[1219/143547.438:ERROR:directory_reader_win.cc(43)] FindFirstFile: A rendszer nem találja a megadott elérési utat. (0x3)
+[1220/185312.728:ERROR:directory_reader_win.cc(43)] FindFirstFile: A rendszer nem találja a megadott elérési utat. (0x3)
+[1229/124352.030:ERROR:directory_reader_win.cc(43)] FindFirstFile: A rendszer nem találja a megadott elérési utat. (0x3)
+[1229/185934.869:ERROR:file_io.cc(90)] ReadExactly: expected 36, observed 0
