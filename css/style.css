@@ -9,6 +9,7 @@
 *:after {
 	margin:0;
 	padding: 0;
+	overflow: hidden;
 }
 
 body {
@@ -324,8 +325,9 @@ img#oldPhoto.smallObject {
 	left: 0;
 	background-color: black;
 	border: 3px dotted rgb(50, 251, 14) transparent;
-	height: 492px;
+	height: 450px;
 	z-index: -1;
+	margin-top: 50px;
 }
 
 #questionBtns {

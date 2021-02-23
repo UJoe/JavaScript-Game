@@ -5,6 +5,7 @@ function initGame() {
   let choose3 = document.getElementById("char3");
   let timer;
   let audio = document.getElementById("audio");
+  audio.volume = 0.9;
 
   choose1.addEventListener("mouseenter", function () {
     choose1.classList.add("zoomUp");
@@ -50,8 +51,9 @@ function initGame() {
   let armorNo = 0;
   let toolNo = 0;
   let timo = 0;
-  let consoleArray = [];
+  let consoleArray = ["<br><br>Elindulsz a frontend harcosok rögös útján..."];
   let starting = true;
+  let death = 0;
 
   // Játékos és ellenfél jellemzői
   let char = [
@@ -500,6 +502,71 @@ function initGame() {
 
   //Új szoba generálás
   function newRoom() {
+    if (death === 3) {
+      let screen = document.getElementById("screen");
+      score += 1000 - step;
+      document.body.className = "disappear darkening";
+      setTimeout(function () {
+        audio.pause();
+        audio.load();
+        screen.innerHTML = `
+            <img class="endPics" src="./img/immortality.jpg">
+            <h3>A HALÁL FELADTA AZ ELLENED VALÓ KÜZDELMET!</h3>
+            <p class="deadText">Egy sötét alagútból kiérve visszanézed fentről az életed...</p>
+            <p class="deadText">Eljutottál a ${step}. szintig.</p>
+            <p class="deadText">Összeszedtél ${score} pontot.</p>
+            `;
+        if (score > hiScore) {
+          hiScore = score;
+          screen.insertAdjacentHTML(
+            "beforeend",
+            `
+              <h3>Ezzel új rekordot állítottál fel! GRATULÁLUNK!</h3>
+              `
+          );
+        } else {
+          screen.insertAdjacentHTML(
+            "beforeend",
+            `
+              <p class="deadText">Ezzel sajnos nem sikerült megdönteni az eddigi ${hiScore} rekordot.</p>
+              `
+          );
+        }
+        screen.insertAdjacentHTML(
+          "beforeend",
+          `
+              <p class="deadText">Kérlek, értékeld a játékot az alábbi gombok egyikével!</p>
+              <button id="newGameBtn">A világ legjobb játéka, akarok még játszani!</button>
+              <br>
+              <p class="deadText">Köszönettel:</p>
+              <img class="endPics" src="./img/frontend-logos1.png">
+              `
+        );
+        document.body.className = "appear";
+        document
+          .getElementById("newGameBtn")
+          .addEventListener("click", function () {
+            step = 0;
+            score = 0;
+            weaponNo = 0;
+            armorNo = 0;
+            toolNo = 0;
+            char[0].hp = Math.round(50 + 70 * Math.random());
+            char[0].att = Math.round(30 + 50 * Math.random());
+            char[0].def = Math.round(40 + 60 * Math.random());
+            char[0].mAtt = Math.round(30 + 50 * Math.random());
+            char[0].mDef = Math.round(40 + 60 * Math.random());
+            death = 0;
+            consoleArray = [
+              "<br><br>Ásítva veszed tudomásul, hogy visszatértél a halandók közé.",
+            ];
+            start = true;
+            newRoom();
+          });
+      }, 2501);
+      return;
+    }
+
     step++;
     let curRoom = room;
     room = parseInt(Math.random() * rooms.length);
@@ -857,6 +924,7 @@ function initGame() {
                 char[0].def = Math.round(40 + 60 * Math.random());
                 char[0].mAtt = Math.round(30 + 50 * Math.random());
                 char[0].mDef = Math.round(40 + 60 * Math.random());
+                death = 0;
                 consoleArray = [
                   "<br><br>Nyújtózol egyet sikeres feltámadásod után...",
                 ];
@@ -888,6 +956,9 @@ function initGame() {
             score += rooms[room].values[i] * 10;
           }
           score += step;
+          if (room === 11) {
+            death++;
+          }
           document.getElementById("score").innerHTML = "Pont: " + score;
           document.getElementById("other").innerHTML =
             "<button id='nextBtn'>Tovább</button>";
@@ -1380,7 +1451,7 @@ function initGame() {
           message("Ez itt nem használható!");
           return;
         }
-        message("Jegyezd meg egy életre!");
+        message("Írd fel a Stone Bookba!");
         for (let x = 0; x < 4; x++) {
           if (x !== rooms[room].key) {
             document.getElementById("answer" + x).disabled = true;
